@@ -1,0 +1,114 @@
+LesionPlot Manual
+
+INTRODUCTION - PREPARATION
+
+This program is a Matlab file that can be run to import and analyze brain sections. Before using it, prepare your slides to optimize performance. Name all the slides 
+with a “_cal_(calibration in microns/pixel)” in their name. So if working with Kentucky 30 which was scanned with a calibration of 687 nm/pixel, then name it 
+“Kentucky 30_cal_0.687.tif” so that the program can adjust calibration as it needs. This calibration can also be changed in the GUI and will not change unless updated
+or a slide is put in with a “_cal_number” ending. Large TIFF files can take a very long time to load and the level of detail they provide is not always necessary. Run 
+the LabScale program to select all the files to be analyzed and resize them into a range that Matlab can quickly load without losing too much detail. This is not 
+necessary to do, but it will reduce loading times. The program will also label the TIFF files it makes from resizing so the user only needs to track the original 
+calibration. Even though the pixel to meters ratio will change, the program will handle it. 
+
+INTRODUCTION - MODES
+
+There are two modes in the LesionPlot program which are called “Length” and “Area.” Length is used to measure the width of the lesion and its position within the 
+brain. The end result of running the program in Length mode should be a color plot that represents the brain and the parts of it where there can be lesions. The 
+purpose of Area is to find how big the lesion was and to make a cartoon plot of the brain slices that can be used to understand what portions of the brain were 
+affected. Activity in both of these modes is the same until after the boundaries are generated around the objects. 
+
+GETTING STARTED 
+
+To start the program, run the Matlab code. You should see the image to the right. The large white box is where the images will be shown while the smaller white box 
+below it is updated with important activities. The update box will show the number of objects that were found, the name of the imported file, when modes are changed, 
+and during appending it will show some of the data and which row it is saved in. At the top right is the toggle button to switch between Area and Length mode. Area 
+mode is the default at start.
+
+LOAD IMAGES/PREVIOUS FILES
+
+The “Import .mat file” will allow you to edit previously saved files. The program must be in the correct mode to accept the files of the same mode. Area mode will not 
+load Length mode information and vice-versa. Also, this command will only recognize .mat files as valid input. “Select TIFF Files” will open a GUI window similar to 
+the previous command, except with two differences. It only recognizes .tif files as valid inputs and can be used to select multiple TIFF files.  Just highlight as 
+many as are needed and select open.
+
+Selecting open will cause the name of the first file selected to be appear like in the image to the right. The arrow keys can be used to move between filenames for 
+import though they will throw error messages if moved too far. Once the correct file is found, select import to actually show the image. This can take time if the 
+file is large. After loading, it should appear like the image to the right. Notice the missing white axis; the image has taken it’s place. There is also a cyan colored
+scale bar at the top left that represents a millimeter in the scale. Below the import button the numbers should have updated. The top number represents the calibration
+of the image in the units provided while the number below it shows how much the image was downsampled if LabScale had been used. The calibration should be different 
+from the “_cal_number” if LabScale was used since the pixels represent a different amount of distance.  Also, this is where the calibration and downsample rate can be
+entered if they were not in the file name. Make sure the click the “Cal” button so the program can calculate the true calibration and set it. 
+
+EDIT IMAGE
+
+Sometimes the loaded might contain extraneous objects that need to be removed or there is only a part of the image that needs to be focused on. The “Crop” tool exists 
+to help. Select it and draw a box around the desired object like in the image to the right and then double click within the box. The image should then be resized. 
+Downsampling should only be used if an image is too large and slowing down the program. It can resize the image like LabScale, though the user can control the rate. 
+The default is set to 0.1. There is no way to undo a downsample, so the image will have to be imported and edited again if it is downsampled incorrectly. The program 
+works by setting a threshold in the image to recognize the background and object as separate and usually 0.8 works. However, some slides can be fainter. Adjust the 
+value next to “See BW Image” to create a more accurate boundary and use the black/white image to check the object recognition before proceeding. If the image is 
+fainter than usual, increase the threshold to about 0.83. 
+
+DATA ANALYSIS
+
+The next portion should not be executed before the previous parts. Generating boundaries and then cropping ruins the scales, though import can be used for a fresh 
+start. Click “Boundaries” to draw bounds on objects in the image. The program uses the color value threshold to find objects, but it also picks up small and 
+unnecessary objects on the slide to draw boundaries around.  The 9000 represents a threshold for the size of the objects and it is not something that will be affected 
+by cropping. It should be changed if the object has been downsampled since it will reduce the pixel perimeter of the objects. If the desired objects are not receiving 
+boundaries reduce noise-cancelling threshold and check if the object appears in the BW image.  Always use “Undo” to remove the boundary before drawing new ones. Also, 
+“Edit Boundary” can be used to smooth out rough edges on the drawn boundaries. Select the button to enter “Editing” mode. The mode should be “Editing” now and the 
+update box should say “Edit boundaries now.” Select a point on the boundary where your edit will begin. If done right, the update box should say the first point was 
+selected. Now draw the new segment of the boundary in a clockwise direction and then select the part of the boundary to end on. The boundary should change to the newly 
+drawn figure.  “Undo” can still be used to remove the entire boundary and draw new ones. Click “Edit Boundary” to exit “editing” mode.
+
+DATA ANALYSIS – AREA MODE
+
+In Area mode, the user can draw a second boundary that does not contain the lesion and use this to figure out the area of the lesion. These two boundaries can also be 
+used to draw a simplified image of the figure. Drawing the second boundary is just like “Editing” mode. Select a point on the red boundary, draw around the region of 
+the lesion, and to complete the boundary click on a part of the red boundary.  As can be seen in the images on the right, completing the boundary creates a new blue 
+boundary on top of the previous red one. 
+
+If the drawing is not correct, the “Undo Edited Draw” button can be clicked to remove the new boundary. “Undo Line Segment” and “Clear Line” can be used before the 
+second boundary click to make changes during the middle of drawing. “Undo Line Segment” will need to be clicked once more after all the line segments are gone to 
+remove the original boundary click. A second lesion can be drawn after selecting the “Second” button. It is drawn the same way, though its color will be green.
+The area of that region can be retrieved by the “Return Lesion Area” button. The number next to it refers to the object whose lesion will be returned. By default it is 
+set to “1”, which refers to the first object that had a boundary generated around it. This will be the leftmost and highest object. The result of a drawing in Area 
+should be like the image on the right. The black region is the lesion. This is the image that will appear after “Save & Show
+
+DATA ANALYSIS – LENGTH MODE
+
+Length mode is used to measure the width of lesions. There will be three or four inputs by the user, depending on how lesions are defined.
+The first input is the length of the brain slice from the midline. For this, the user must click the point on the boundary that is farthest from the midline. A blue 
+dot will appear at this point. Next the user draws a midline. This is done by clicking on any two points on the image, anywhere. These two points will cause a black 
+long to be drawn that extends infinitely in both directions. Finally, the lesion is drawn. The program allows for two levels of lesions “normal” and “certain.” 
+“Normal” is used either when the user is sure about all lesion lines or when they are uncertain and want to draw the longest possible length of lesion space. "Certain” 
+is used when there is a smaller lesion space that the user knows is the lesion and wants to emphasize that in a plot. If there is no “certain” mode line drawn, then 
+the “normal” mode line will show characteristics of a “certain” mode line in the plot.  In the above image, the “normal” line is blue and the “certain” line is green.
+Second lesions can also be measured here after clicking the second button. The result of measurements in Length mode will be similar to the image on the right. The 
+dark blue represents empty space and there is so much because this particular plot is off-set from zero. The light blue represents potions of the brain that are not 
+lesioned while the yellow represents uncertain lesion space. The red is certain lesion space. If “certain” mode was not used, then the “normal” mode plot points would 
+be the same red. 
+
+APPENDING AND SAVING
+
+After analyzing each slice, use “Append” to hold that information for saving later. “Append” will not save the information in a file, but it will hold on to the 
+information for saving later. Also, it will import the next image and increment the row number as well. If incorrect information was appended, then that information 
+can be overwritten by the correct information through the use of “Append.”
+
+“Save & Show” will save the information in the “Output Filename.” By default this is “default,” so saving without updating the filename will cause it to save in 
+“default.mat.” However, if a file is imported, then the output file will be renamed to that filename. After saving, the program will return the data in its 
+processed form, which is a color or cartoon plot depending on the mode. The row numbers are changed by the arrow buttons at the bottom of the GUI. The arrow buttons 
+that control the file selection also change the row numbers, but the row number buttons do not change the file selection. This allows for easy movement between rows 
+and images together while also allowing the user to start a certain image in a latter row. For example, in the color map above the first image imported was “France 26” 
+and to make space for input of information from France 7 – 25 later, the first 25 rows were left empty. 
+
+VIEWING PLOTS
+
+For the files made by length mode, load the “processed” data and call the command imagesc on the variable holding the data. The colorplot data is the raw numbers of 
+the measurement but they have not been organized in a way to create the correct plot. They are saved in case the user wants to load in the file and make edits later 
+on. Area mode generates a file which contains data that can be plotted by the ShowLesions function. Run the function and select the Matlab file.
+
+GENERAL MATLAB TOOLS
+
+Matlab provides a zoom in and out tool, which are in the top left corner. They are safe to use at any point in the process. Click the zoom button after done zooming 
+to exit zoom mode. There is also grab tool that can be used while zoomed in to move the image around.
