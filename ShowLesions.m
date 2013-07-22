@@ -24,7 +24,7 @@ for row = 1:m
     set(gca,'YDir','reverse');
     title(strcat(name,{' '},num2str(row)));
     if ~isempty(real)       
-        ShowOnePlot(real,boundset,row,name)
+        ShowOnePlot(real,boundset)
     end
     hold off;
     
@@ -37,12 +37,12 @@ end
 % Creates figure with one big plot only
 function ShowOnePlotOnNewFigure(~,~,real,boundset,row,name)
 figure;
-ShowOnePlot(real,boundset,row,name)
+ShowOnePlot(real,boundset)
 title(strcat(name,{' '},num2str(row)));
 set(gca,'YDir','reverse');
 
 % Plots objects on current figure
-function ShowOnePlot(real,boundset,row,name)
+function ShowOnePlot(real,boundset)
 
 [m1,~] = size(real);
 [m2,~] = size(boundset);

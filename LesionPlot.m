@@ -67,6 +67,7 @@ handles.normal = 1; % counter for drawing liberal lesion/lesion area
 handles.certain = 1; % counter for when we're sure about the lesion
 handles.outFile = 'default'; % default name for output file
 handles.row = 1; % keep track of which row of brain we're on
+handles.bregma = 0; % put bregma out of bounds first
 
 % Choose default command line output for LesionPlot
 handles.output = hObject;
@@ -1101,7 +1102,7 @@ end
 
 
 % --- Executes on button press in Toggle. Switch between Length and Area
-function Toggle_Callback(hObject, ~, handles) %#ok<DEFNU>
+function Toggle_Callback(hObject, ~, handles)
 % hObject    handle to Toggle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -1170,6 +1171,16 @@ location = strcat(pathname,filename);
 file = load(location);
 handles.outFile = strrep(filename,'.mat','');
 set(handles.Filename,'String',handles.outFile);
+
+% Select the correct mode
+if isfield(file,'colorplot') && ~(handles.mode) || isfield(file,'plots') && (handles.mode)
+    Toggle_Callback(hObject, [], handles);
+end
+handles = guidata(hObject);
+
+% Clear previous data
+handles.colorPlots = [];
+handles.plot = [];
 
 % If we're in length mode, we have processed and results files
 if (handles.mode)
@@ -1313,7 +1324,7 @@ guidata(hObject,handles);
 
 
 % --- Executes on button press in Bregma.
-function Bregma_Callback(hObject, eventdata, handles)
+function Bregma_Callback(hObject, ~, handles) %#ok<DEFNU>
 % hObject    handle to Bregma (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
