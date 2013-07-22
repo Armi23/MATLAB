@@ -9,6 +9,6 @@ if isfield(fileinfo,'plots')
     file = fileinfo.plots;
     ShowLesions(file,name);
 elseif isfield(fileinfo,'processed')
-    file = fileinfo.processed;
-    imagesc(file);
+    file = fileinfo.colorplot;
+    MakeColorPlot(file,name);
 end

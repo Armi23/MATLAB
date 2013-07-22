@@ -22,7 +22,7 @@ function varargout = LesionPlot(varargin)
 
 % Edit the above text to modify the response to help LesionPlot
 
-% Last Modified by GUIDE v2.5 12-Jul-2013 17:25:39
+% Last Modified by GUIDE v2.5 22-Jul-2013 11:02:15
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -984,7 +984,12 @@ if (handles.mode) % actions in length mode
     handles.colorPlots(row,3) = cdistance * 10000;
     handles.colorPlots(row,4) = clength * 10000;
     handles.colorPlots(row,5) = brain * 10000;
-
+    handles.colorPlots(row,6) = 0;
+    % Mark Bregma's spot
+    if (row == handles.bregma)
+        handles.colorPlots(row,6) = 1;
+    end
+    
     line = ['Appended information to row ' num2str(row)];
     PrintText(hObject,handles,line);
     guidata(hObject,handles);
@@ -1023,30 +1028,7 @@ function Save_Callback(~, ~, handles) %#ok<DEFNU>
 % handles    structure with handles and user data (see GUIDATA)
 if (handles.mode)
     colorplot = handles.colorPlots;
-    [m,~] = size(colorplot);
-    processed = zeros(m,80);
-    for i = 1:m 
-       blank = colorplot(i,1); % first column has space to lesion
-       lesion = colorplot(i,2); % second column has size of lesion
-       cblank = colorplot(i,3);% distance to space to certain lesion
-       clesion = colorplot(i,4); % size of certain lesion
-       brain = colorplot(i,5);
-
-       % first draw brain area
-       processed(i,1:brain) = 1;
-
-       % if all is 0, there is nothing here
-       if ~(lesion == 0)
-           processed(i,blank + 1:(lesion + blank)) = 2;
-           processed(i,cblank + 1:(clesion + cblank)) = 3;
-       end
-    end
-
-    save(strcat('ColorPlots\',handles.outFile),'processed','colorplot');
-    
-    % show generated image
-    figure, imagesc(processed);
-    
+    MakeColorPlot(colorplot,handles.outFile);
 else 
     plots = handles.plot;
     save(strcat('CartoonPlots\',handles.outFile),'plots');
@@ -1327,4 +1309,13 @@ if (handles.mode) % in Length mode
     handles.certain = 1;  
 end
 
+guidata(hObject,handles);
+
+
+% --- Executes on button press in Bregma.
+function Bregma_Callback(hObject, eventdata, handles)
+% hObject    handle to Bregma (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.bregma = handles.row;
 guidata(hObject,handles);
