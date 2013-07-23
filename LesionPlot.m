@@ -1029,6 +1029,7 @@ function Save_Callback(~, ~, handles) %#ok<DEFNU>
 % handles    structure with handles and user data (see GUIDATA)
 if (handles.mode)
     colorplot = handles.colorPlots;
+    save(strcat('ColorPlots\',handles.outFile),'colorplot');
     MakeColorPlot(colorplot,handles.outFile);
 else 
     plots = handles.plot;
@@ -1187,7 +1188,7 @@ if (handles.mode)
     handles.colorPlots = file.colorplot;   
     line = ['Loaded ' filename ' in length mode'];
     PrintText(hObject,handles,line);
-    figure,imagesc(file.processed);
+    figure,MakeColorPlot(handles.colorPlots,handles.outFile);
     
 % Otherwise we are in area mode which contains sets of plots
 else
