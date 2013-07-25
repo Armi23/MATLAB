@@ -1188,7 +1188,7 @@ if (handles.mode)
     handles.colorPlots = file.colorplot;   
     line = ['Loaded ' filename ' in length mode'];
     PrintText(hObject,handles,line);
-    figure,MakeColorPlot(handles.colorPlots,handles.outFile);
+    MakeColorPlot(handles.colorPlots,handles.outFile);
     
 % Otherwise we are in area mode which contains sets of plots
 else
