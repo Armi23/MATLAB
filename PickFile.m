@@ -6,9 +6,9 @@ fileinfo = load(strcat(PathName,FileName));
 name = strtok(FileName,'.');
 
 if isfield(fileinfo,'plots')
-    file = fileinfo.plots;
+    file = fileinfo.plots; 
     ShowLesions(file,name);
-elseif isfield(fileinfo,'processed')
+elseif isfield(fileinfo,'colorplot')
     file = fileinfo.colorplot;
     MakeColorPlot(file,name);
 end
