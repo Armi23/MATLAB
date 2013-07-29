@@ -607,7 +607,7 @@ function SelectFileButton_Callback(hObject, ~, handles) %#ok<DEFNU>
 
 % allows dialogue window to find mutliple files
 [handles.filenames,handles.pathname,~] = uigetfile('*.tif','MultiSelect','on');
-
+% if (handles.filenames)
 % if there is only one file, put it in a cell to conform to code
 if ~iscellstr(handles.filenames)
     handles.filenames = {handles.filenames};
@@ -1030,7 +1030,8 @@ function Save_Callback(~, ~, handles) %#ok<DEFNU>
 if (handles.mode)
     colorplot = handles.colorPlots;
     save(strcat('ColorPlots\',handles.outFile),'colorplot');
-    MakeColorPlot(colorplot,handles.outFile);
+    MakeColorPlot(colorplot,handles.outFile,1);
+    HiRezColorPlot(handles.colorPlots,handles.outFile,10);
 else 
     plots = handles.plot;
     save(strcat('CartoonPlots\',handles.outFile),'plots');
@@ -1168,38 +1169,40 @@ function ImportOld_Callback(hObject, ~, handles) %#ok<DEFNU>
 
 % Select file and load
 [filename,pathname,~] = uigetfile('*.mat');
-location = strcat(pathname,filename);
-file = load(location);
-handles.outFile = strrep(filename,'.mat','');
-set(handles.Filename,'String',handles.outFile);
+if (filename) % if we have a file
+    location = strcat(pathname,filename);
+    file = load(location);
+    handles.outFile = strrep(filename,'.mat','');
+    set(handles.Filename,'String',handles.outFile);
 
-% Select the correct mode
-if isfield(file,'colorplot') && ~(handles.mode) || isfield(file,'plots') && (handles.mode)
-    Toggle_Callback(hObject, [], handles);
+    % Select the correct mode
+    if isfield(file,'colorplot') && ~(handles.mode) || isfield(file,'plots') && (handles.mode)
+        Toggle_Callback(hObject, [], handles);
+    end
+    handles = guidata(hObject);
+
+    % Clear previous data
+    handles.colorPlots = [];
+    handles.plot = [];
+
+    % If we're in length mode, we have processed and results files
+    if (handles.mode)
+        handles.colorPlots = file.colorplot;   
+        line = ['Loaded ' filename ' in length mode'];
+        PrintText(hObject,handles,line);
+        MakeColorPlot(handles.colorPlots,handles.outFile,1);
+        HiRezColorPlot(handles.colorPlots,handles.outFile,10);
+
+    % Otherwise we are in area mode which contains sets of plots
+    else
+        handles.plot = file.plots;
+        line = ['Loaded ' filename ' in area mode'];
+        PrintText(hObject,handles,line);
+        ShowLesions(handles.plot,handles.outFile);
+    end
+
+    guidata(hObject,handles);
 end
-handles = guidata(hObject);
-
-% Clear previous data
-handles.colorPlots = [];
-handles.plot = [];
-
-% If we're in length mode, we have processed and results files
-if (handles.mode)
-    handles.colorPlots = file.colorplot;   
-    line = ['Loaded ' filename ' in length mode'];
-    PrintText(hObject,handles,line);
-    MakeColorPlot(handles.colorPlots,handles.outFile);
-    
-% Otherwise we are in area mode which contains sets of plots
-else
-    handles.plot = file.plots;
-    line = ['Loaded ' filename ' in area mode'];
-    PrintText(hObject,handles,line);
-    ShowLesions(handles.plot,handles.outFile);
-end
-
-guidata(hObject,handles);
-
 % --- Executes on button press in RowNext.
 function RowNext_Callback(hObject, ~, handles)
 % hObject    handle to RowNext (see GCBO)

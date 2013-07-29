@@ -9,6 +9,8 @@ if isfield(fileinfo,'plots')
     file = fileinfo.plots; 
     ShowLesions(file,name);
 elseif isfield(fileinfo,'colorplot')
-    file = fileinfo.colorplot;
-    MakeColorPlot(file,name);
+    colorplot = fileinfo.colorplot;
+    MakeColorPlot(colorplot,name);
+    HiRezColorPlot(colorplot,name,10);
+
 end
