@@ -607,7 +607,7 @@ function SelectFileButton_Callback(hObject, ~, handles) %#ok<DEFNU>
 
 % allows dialogue window to find mutliple files
 [handles.filenames,handles.pathname,~] = uigetfile('*.tif','MultiSelect','on');
-% if (handles.filenames)
+
 % if there is only one file, put it in a cell to conform to code
 if ~iscellstr(handles.filenames)
     handles.filenames = {handles.filenames};
