@@ -10,7 +10,5 @@ if isfield(fileinfo,'plots')
     ShowLesions(file,name);
 elseif isfield(fileinfo,'colorplot')
     colorplot = fileinfo.colorplot;
-    MakeColorPlot(colorplot,name);
     HiRezColorPlot(colorplot,name,10);
-
 end

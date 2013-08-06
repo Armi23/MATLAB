@@ -50,6 +50,7 @@ function ShowOnePlot(real,boundset)
 
 % Iterate over all real boundaries
 for i = 1:m1
+    hold all;
     r = real{i};
     
     % If there are no edited sets, which would be the case if the boundset
@@ -61,35 +62,13 @@ for i = 1:m1
     % Otherwise, fill the real as black and then draw the edited on top in
     % white so the lesioned area is black    
     else            
-    b = boundset{i};
-    fill(r(:,1),r(:,2),'k',b(:,1),b(:,2),'w');
+        b = boundset{i};
+        fill(r(:,1),r(:,2),'k',b(:,1),b(:,2),'w');
     
     end    
 end
 
-
-% % Iterate over all real boundaries
-% for i = 1:m1
-%     r = real{i};
-%     
-%     % If we are at an index larger than the size of the boundset, then we
-%     % do not have anymore edited boundaries. Just draw normally. 
-%     if (i > m2)
-%         fill(r(:,1),r(:,2),'w');
-%         
-%     else            
-%         
-%         if ~isempty(boundset{i})
-%             b = boundset{i};
-%             fill(r(:,1),r(:,2),'k',b(:,1),b(:,2),'w');
-%             
-%         else
-%             fill(r(:,1),r(:,2),'w');
-%         end
-%     end    
-% end
-
-% 3D Plot
+% 3D Plot - Experimental and more for fun
 % for row = 1:m
 %     real = file{row,1};
 %     reals{row} = real;

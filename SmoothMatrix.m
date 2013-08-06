@@ -3,15 +3,14 @@ function matrixresult = SmoothMatrix(data)
 [m,n] =  size(data);
 matrixresult = zeros(m,n);
 for i = 1:n
-    matrixresult(:,i) =  SmoothList(data(:,i));
+    matrixresult(:,i) =  SmoothList(data(:,i)); % Smooth all columsn
 end
 
 function smoothlist = SmoothList(list)
 
-[m,~] = size(list);
-
 % Zeros must be removed because they are outliers. Find their indices so
 % that we can break apart the list at those points. 
+[m,~] = size(list);
 for i = 1:m
     if list(i)
         index = i;
